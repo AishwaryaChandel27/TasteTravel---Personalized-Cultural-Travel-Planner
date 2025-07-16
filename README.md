@@ -32,6 +32,7 @@ TasteTravel is a comprehensive worldwide cultural travel planning application th
 ### Prerequisites
 - Node.js 18+ installed
 - OpenAI API key (required for AI features)
+- Optional: Gemini API key for AI fallback support
 - Optional: Qloo API key for enhanced recommendations
 
 ### Installation
@@ -51,6 +52,7 @@ npm install
 Create a `.env` file in the root directory:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here (optional)
 QLOO_API_KEY=your_qloo_api_key_here (optional)
 ```
 
@@ -131,6 +133,8 @@ The application uses a relational database with these main entities:
 - `POST /api/chat` - Chat with AI travel assistant
 - `POST /api/cultural-insights` - Get cultural insights for destinations
 - `POST /api/itinerary-description` - Generate itinerary descriptions
+- `GET /api/ai-status` - Check AI service availability (OpenAI and Gemini)
+- `POST /api/ai-reset` - Reset AI service availability for retry
 
 ### Other
 - `GET /api/regions` - Get world regions for map interface
@@ -138,11 +142,18 @@ The application uses a relational database with these main entities:
 
 ## 🤖 AI Integration
 
-### OpenAI Features
+### Dual AI Provider System
+- **OpenAI (Primary)**: GPT-4o for travel advice, cultural insights, and itinerary descriptions
+- **Gemini (Fallback)**: Gemini-2.5-flash automatic fallback when OpenAI is unavailable
+- **Intelligent Switching**: Seamless transition between providers for uninterrupted service
+- **Rate Limit Handling**: Automatic detection and failover during rate limiting
+
+### AI Features
 - **Travel Advice**: Personalized recommendations and travel tips
 - **Cultural Insights**: Deep cultural information about destinations
 - **Itinerary Descriptions**: AI-generated summaries of travel plans
 - **Chat Assistant**: Interactive travel planning support
+- **Service Monitoring**: Real-time AI service status tracking
 
 ### Qloo Integration
 - **Taste AI™**: Personalized cultural recommendations

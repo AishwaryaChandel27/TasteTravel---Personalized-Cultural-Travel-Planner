@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { generateTravelAdvice, generateCulturalInsights, generateItineraryDescription } from "./services/openai";
+import { aiService } from "./services/ai-service";
 import { qlooService } from "./services/qloo";
 import { insertChatMessageSchema, insertItinerarySchema } from "@shared/schema";
 import { z } from "zod";
@@ -158,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Itinerary not found" });
       }
       
-      const description = await generateItineraryDescription(itinerary.items || []);
+      const description = await aiService.getItineraryDescription(itinerary.items || []);
       res.json({ description });
     } catch (error) {
       res.status(500).json({ error: "Failed to generate itinerary description" });
@@ -174,7 +174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      const advice = await generateTravelAdvice({
+      const advice = await aiService.getTravelAdvice({
         message,
         userPreferences,
         currentDestination,
@@ -197,6 +197,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // API Status endpoint
+  app.get("/api/ai-status", async (req, res) => {
+    try {
+      const status = aiService.getAPIStatus();
+      res.json(status);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get AI service status" });
+    }
+  });
+
+  // Reset AI service availability
+  app.post("/api/ai-reset", async (req, res) => {
+    try {
+      aiService.resetAPIAvailability();
+      res.json({ message: "AI service availability reset" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to reset AI service" });
+    }
+  });
+
   // Cultural Insights API
   app.post("/api/cultural-insights", async (req, res) => {
     try {
@@ -206,7 +226,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Destination and preferences array are required" });
       }
 
-      const insights = await generateCulturalInsights(destination, preferences);
+      const insights = await aiService.getCulturalInsights(destination, preferences);
       res.json({ insights });
     } catch (error) {
       res.status(500).json({ error: "Failed to generate cultural insights" });

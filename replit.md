@@ -60,8 +60,10 @@ The application uses a relational database with the following main entities:
 - **@radix-ui/react-***: Accessible UI component primitives
 
 ### AI Services
-- **OpenAI API**: Used for generating travel advice, cultural insights, and itinerary descriptions
+- **OpenAI API**: Primary AI service for generating travel advice, cultural insights, and itinerary descriptions
+- **Gemini API**: Fallback AI service that automatically activates when OpenAI is unavailable or rate-limited
 - **Qloo Taste AI™**: Mock implementation for personalized cultural recommendations (to be replaced with actual API)
+- **Intelligent Fallback**: Unified AI service that switches between OpenAI and Gemini for enhanced reliability
 
 ### UI/UX Dependencies
 - **tailwindcss**: Utility-first CSS framework
@@ -95,6 +97,10 @@ The application is designed to be easily deployable to platforms like Replit, Ve
 - ✓ Created comprehensive README.md with detailed documentation
 - ✓ Enhanced storage layer with proper null handling for optional fields
 - ✓ Improved worldwide coverage: Asia (4), Europe (4), Africa (3), Americas (4), Oceania (2)
+- ✓ Implemented Gemini API as intelligent fallback when OpenAI API fails
+- ✓ Built unified AI service that automatically switches between OpenAI and Gemini for reliability
+- ✓ Added AI service status endpoint for monitoring and debugging
+- ✓ Enhanced error handling with graceful fallbacks to prevent service interruption
 
 ## Documentation
 
