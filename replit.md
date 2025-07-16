@@ -84,3 +84,25 @@ The application is configured for deployment with:
 - Scripts for development (`npm run dev`), build (`npm run build`), and production (`npm start`)
 
 The application is designed to be easily deployable to platforms like Replit, Vercel, or any Node.js hosting environment with PostgreSQL support.
+
+## Recent Changes (July 16, 2025)
+
+- ✓ Expanded worldwide destination coverage to 17 global destinations across all continents
+- ✓ Added comprehensive cultural sites (17 sites) matching each destination
+- ✓ Included diverse global restaurants (17 restaurants) representing cuisines from each region
+- ✓ Enhanced Qloo service with worldwide recommendations spanning all continents
+- ✓ Updated data structures to support truly global travel planning
+- ✓ Created comprehensive README.md with detailed documentation
+- ✓ Enhanced storage layer with proper null handling for optional fields
+- ✓ Improved worldwide coverage: Asia (4), Europe (4), Africa (3), Americas (4), Oceania (2)
+
+## Documentation
+
+The project includes comprehensive documentation in README.md covering:
+- Feature overview and worldwide coverage
+- Setup and installation instructions
+- Architecture and technology stack details
+- API endpoint documentation
+- Deployment guides for multiple platforms
+- Contributing guidelines and development setup
+- Troubleshooting and support information
