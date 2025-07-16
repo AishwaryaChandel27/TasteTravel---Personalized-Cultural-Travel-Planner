@@ -11,46 +11,62 @@ export class AIService {
   constructor() {
     // Initialize Gemini client if API key is available
     const geminiApiKey = process.env.GEMINI_API_KEY;
+    console.log('Gemini API key available:', !!geminiApiKey);
     if (geminiApiKey) {
       this.geminiClient = new GoogleGenAI({ apiKey: geminiApiKey });
       this.isGeminiAvailable = true;
+      console.log('Gemini client initialized successfully');
+    } else {
+      console.log('No Gemini API key found, fallback not available');
     }
   }
 
   // Main travel advice function with fallback
   async getTravelAdvice(request: TravelAdviceRequest): Promise<TravelAdviceResponse> {
+    console.log('Starting travel advice request. OpenAI available:', this.isOpenAIAvailable, 'Gemini available:', this.isGeminiAvailable);
+    
     // Try OpenAI first
     if (this.isOpenAIAvailable) {
       try {
-        return await generateTravelAdvice(request);
+        console.log('Calling OpenAI API...');
+        const result = await generateTravelAdvice(request);
+        console.log('OpenAI API succeeded');
+        return result;
       } catch (error: any) {
-        console.log('OpenAI API failed:', error.message);
+        console.log('OpenAI API failed:', error.message || error);
         
         // Check if it's a rate limit or quota error
         if (error.status === 429 || error.code === 'insufficient_quota') {
-          console.log('OpenAI rate limit reached, switching to Gemini');
+          console.log('OpenAI rate limit/quota error detected, marking as unavailable');
           this.isOpenAIAvailable = false;
         } else {
-          // For other errors, still try Gemini as fallback
-          console.log('OpenAI error, trying Gemini fallback');
+          console.log('OpenAI general error, attempting Gemini fallback');
         }
+        // Continue to fallback - don't return here
       }
     }
 
     // Fallback to Gemini
+    console.log('Attempting Gemini fallback. Available:', this.isGeminiAvailable, 'Client:', !!this.geminiClient);
     if (this.isGeminiAvailable && this.geminiClient) {
       try {
-        return await this.generateTravelAdviceWithGemini(request);
+        console.log('Calling Gemini API for travel advice...');
+        const result = await this.generateTravelAdviceWithGemini(request);
+        console.log('Gemini API succeeded');
+        return result;
       } catch (error: any) {
-        console.log('Gemini API failed:', error.message);
+        console.log('Gemini API failed:', error.message || error);
         this.isGeminiAvailable = false;
       }
+    } else {
+      console.log('Gemini not available or client not initialized');
     }
 
     // If both APIs fail, return error response
+    console.log('Both APIs failed, returning error response');
     return {
-      response: "I'm sorry, I'm having trouble processing your request right now. Please try again later or contact support if the problem persists.",
-      suggestions: ["Try asking a different question", "Check back in a few minutes", "Contact support for assistance"],
+      response: "I'm sorry, I'm having trouble processing your request right now. Please try again later.",
+      suggestions: [],
       culturalTips: []
     };
   }

@@ -174,12 +174,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Message is required" });
       }
 
+      console.log('Processing chat request:', { message, userPreferences, currentDestination });
+
       const advice = await aiService.getTravelAdvice({
         message,
         userPreferences,
         currentDestination,
         itinerary
       });
+
+      console.log('AI service returned:', advice);
 
       // Store chat message (mock user ID for now)
       const chatMessage = await storage.createChatMessage({
@@ -193,6 +197,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         messageId: chatMessage.id
       });
     } catch (error) {
+      console.error('Chat route error:', error);
       res.status(500).json({ error: "Failed to process chat message" });
     }
   });

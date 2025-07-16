@@ -19,8 +19,7 @@ export interface TravelAdviceResponse {
 }
 
 export async function generateTravelAdvice(request: TravelAdviceRequest): Promise<TravelAdviceResponse> {
-  try {
-    const systemPrompt = `You are a knowledgeable cultural travel assistant powered by AI. You specialize in providing personalized travel advice, cultural insights, and practical tips for travelers interested in cultural experiences worldwide.
+  const systemPrompt = `You are a knowledgeable cultural travel assistant powered by AI. You specialize in providing personalized travel advice, cultural insights, and practical tips for travelers interested in cultural experiences worldwide.
 
 Your expertise includes:
 - Cultural sites, museums, and historical landmarks
@@ -39,32 +38,25 @@ Current itinerary: ${request.itinerary ? JSON.stringify(request.itinerary) : 'No
 
 Respond in JSON format with: { "response": "main response", "suggestions": ["quick suggestion 1", "quick suggestion 2"], "culturalTips": ["cultural tip 1", "cultural tip 2"] }`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: request.message }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-      max_tokens: 1000
-    });
+  // Let errors propagate to the AI service for proper fallback handling
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: request.message }
+    ],
+    response_format: { type: "json_object" },
+    temperature: 0.7,
+    max_tokens: 1000
+  });
 
-    const result = JSON.parse(response.choices[0].message.content || '{}');
-    
-    return {
-      response: result.response || "I'm sorry, I couldn't process your request. Please try asking about travel destinations, cultural sites, or travel tips.",
-      suggestions: result.suggestions || [],
-      culturalTips: result.culturalTips || []
-    };
-  } catch (error) {
-    console.error('OpenAI API Error:', error);
-    return {
-      response: "I'm sorry, I'm having trouble processing your request right now. Please try again later.",
-      suggestions: [],
-      culturalTips: []
-    };
-  }
+  const result = JSON.parse(response.choices[0].message.content || '{}');
+  
+  return {
+    response: result.response || "I'm sorry, I couldn't process your request. Please try asking about travel destinations, cultural sites, or travel tips.",
+    suggestions: result.suggestions || [],
+    culturalTips: result.culturalTips || []
+  };
 }
 
 export async function generateCulturalInsights(destination: string, preferences: string[]): Promise<string[]> {
