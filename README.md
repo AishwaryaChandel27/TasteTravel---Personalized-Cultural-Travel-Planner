@@ -39,7 +39,7 @@ TasteTravel is a comprehensive worldwide cultural travel planning application th
 
 1. **Clone the repository**:
 ```bash
-git clone <repository-url>
+git clone https://github.com/AishwaryaChandel27/TasteTravel---Personalized-Cultural-Travel-Planner
 cd tastetravel
 ```
 
