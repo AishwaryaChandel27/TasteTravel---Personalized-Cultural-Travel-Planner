@@ -48,7 +48,7 @@ export default function WorldMap() {
         <Card className="overflow-hidden">
           <div className="relative">
             <img 
-              src="attached_assets/world-map.png" 
+              src="https://github.com/AishwaryaChandel27/TasteTravel---Personalized-Cultural-Travel-Planner/blob/main/attached_assets/world-map.png" 
               alt="Interactive world map" 
               className="w-full h-96 object-cover"
             />
