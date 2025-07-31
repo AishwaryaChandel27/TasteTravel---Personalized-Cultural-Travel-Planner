@@ -32,7 +32,7 @@ export default function HeroSection() {
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-2 border-white text-black hover:bg-white hover:text-travel-blue font-semibold"
+              className="border-2 border-white text-gray-700 hover:bg-black hover:text-travel-blue font-semibold"
             >
               Watch Demo
             </Button>
