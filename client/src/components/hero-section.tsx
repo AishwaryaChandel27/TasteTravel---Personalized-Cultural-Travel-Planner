@@ -34,7 +34,9 @@ export default function HeroSection() {
               variant="outline" 
               className="border-2 border-white text-gray-700 hover:bg-black hover:text-travel-blue font-semibold"
             >
+              <a src="https://youtu.be/QJ-p8wFI2WU" href="#">
               Watch Demo
+                </a>
             </Button>
           </div>
         </div>
